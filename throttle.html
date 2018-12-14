@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Throttle</title>
+  <style>
+    html, body, div {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #eeeeee;
+      height: 1000px;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    function throttle(fn, interval) {
+      // 记录上次执行fn的时间
+      let last = +new Date();
+
+      // 将throttle处理结果当作函数返回
+      return function () {
+        let context = this;
+        let args = arguments;
+        let now = +new Date();
+
+        if (now - last >= interval) {
+          // 需要将当前执行的now赋值给last，没有这行，会导致多次，因为此时now - last始终大于interval
+          last = now;
+          fn.apply(context, args);
+        }
+      }
+    }
+
+    scrollFn = throttle(() => console.log('触发滚动事件！'), 5000);
+
+    document.addEventListener('scroll', scrollFn);
+  </script>
+</body>
+</html>
